@@ -29,3 +29,4 @@ class StudentDetail(models.Model):
     def __str__(self):
         return f' MR. {self.first_name}  {self.last_name} class - {self.student_class} '
     
+       

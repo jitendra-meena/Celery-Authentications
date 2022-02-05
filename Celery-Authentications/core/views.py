@@ -1,17 +1,16 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .tasks import test_celery
-from django.views.generic import TemplateView
 from rest_framework.views import APIView
-from .serializer import RegisterSerializer
+from .serializer import RegisterSerializer,SchoolSerializer
 from rest_framework import status
 from rest_framework.response import Response
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,login
 from django.views import View
 from django.contrib import messages
-from .models import SchoolManagement
+from .models import SchoolManagement,StudentDetail
 from django.contrib.auth.models import User
-
+from rest_framework.decorators import api_view
 
 
 
@@ -106,11 +105,28 @@ class ChangePassword(View):
             if new_pass == cfm_pass:
                 user_obj.user.set_password(new_pass)
                 user_obj.user.save()
-                update_session_auth_hash(request, user_obj.user)
                 messages.success(request, 'Your password was successfully updated!')
             return redirect('/edit_userprofile')
         else:
             massage = messages.error(request, 'Wrong Password !')
             return redirect('/edit_userprofile',{'msg':'Wrong Password !'})
 
-
+@api_view(['POST','GET','PUT'])
+def School(request,school_id):
+    if request.method =='POST':
+        serializer = SchoolSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    if request.method == 'PUT':
+        stud = StudentDetail.objects.get(id = school_id)
+        serializer =SchoolSerializer(stud,data=request.data,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        
+            
