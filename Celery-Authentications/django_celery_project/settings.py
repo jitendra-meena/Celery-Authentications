@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'core',
     'django_celery_results',
     'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -83,12 +84,17 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'dbtest', 
         'USER': 'postgres', 
-        'PASSWORD': '*****',
+        'PASSWORD': 'postgres',
         'HOST': 'localhost', 
         'PORT': '5433',
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-
+from .models import College
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +17,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class SchoolSerializer(serializers.Serializer):
     pass
+
+class CollegeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = College
+        fields = '__all__'

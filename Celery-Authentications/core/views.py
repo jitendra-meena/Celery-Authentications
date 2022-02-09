@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .tasks import test_celery
 from rest_framework.views import APIView
-from .serializer import RegisterSerializer,SchoolSerializer
+from .serializer import RegisterSerializer,SchoolSerializer,CollegeSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth import authenticate,login
@@ -128,5 +128,9 @@ def School(request,school_id):
             return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
-        
+class College(APIView):
+    def get(self,request):
+        college = College.objects.all()
+        serializer = CollegeSerializer(college,many=True)  
+        return Response(serializer.data)      
             
