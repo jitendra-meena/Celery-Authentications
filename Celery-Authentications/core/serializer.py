@@ -20,5 +20,5 @@ class SchoolSerializer(serializers.Serializer):
 
 class CollegeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = College
+        model = User
         fields = '__all__'

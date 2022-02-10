@@ -11,8 +11,8 @@ from django.contrib import messages
 from .models import SchoolManagement,StudentDetail
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
-
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 def user_home(request):
     test_celery.delay()
@@ -129,8 +129,13 @@ def School(request,school_id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
 class College(APIView):
+    authention_classes = JWTAuthentication
     def get(self,request):
-        college = College.objects.all()
+        college = User.objects.all()
         serializer = CollegeSerializer(college,many=True)  
         return Response(serializer.data)      
+
             
+class Login_With_Google(APIView):
+    def get(self,request):
+        return Response(status=status.HTTP_200_OK)            
