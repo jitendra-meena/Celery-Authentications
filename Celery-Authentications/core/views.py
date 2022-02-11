@@ -133,4 +133,7 @@ class College(APIView):
         college = College.objects.all()
         serializer = CollegeSerializer(college,many=True)  
         return Response(serializer.data)      
-            
+
+class Social_Login(APIView):
+    def get(self,request):
+        pass            
