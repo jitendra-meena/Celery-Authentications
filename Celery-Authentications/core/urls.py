@@ -14,3 +14,4 @@ urlpatterns = [
     path('social_login/',Social_Login.as_view(),name='social_login'),
     
 ]
+

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'rest_framework',
     'rest_framework_simplejwt',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware' # changes
 ]
 
 ROOT_URLCONF = 'django_celery_project.urls'
@@ -67,6 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends', #changes 
+                'social_django.context_processors.login_redirect',#changes 
             ],
         },
     },
@@ -90,14 +94,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
         },
-    'postgres': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dbtest', 
-        'USER': 'postgres', 
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost', 
-        'PORT': '5433',
-    }
+    # 'postgres': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'dbtest', 
+    #     'USER': 'postgres', 
+    #     'PASSWORD': 'postgres',
+    #     'HOST': 'localhost', 
+    #     'PORT': '5433',
+    # }
 }
 
 REST_FRAMEWORK = {
@@ -152,36 +156,56 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
-
-
 CELERY_RESULT_BACKEND ='django-db'  
 
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.github.GithubOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
+
+
 # DataFlair #Logging Information
-LOGGING = {
-    'version': 1,
-    # Version of logging
-    'disable_existing_loggers': False,
-    #disable logging 
-    # Handlers #############################################################
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'dataflair-debug.log',
-        },
-########################################################################
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    # Loggers ####################################################################
-    'loggers': {
-        'django': {
-            'handlers': ['file', 'console'],
-            'level': 'DEBUG',
-            'propagate': True,
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG')
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     # Version of logging
+#     'disable_existing_loggers': False,
+#     #disable logging 
+#     # Handlers #############################################################
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': 'dataflair-debug.log',
+#         },
+# ########################################################################
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     # Loggers ####################################################################
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file', 'console'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG')
+#         },
+#     },
+# }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'computerprograming7999@gmail.com'
+EMAIL_HOST_PASSWORD = 'Meena@1234'
+DEFAULT_FROM_EMAIL = 'computerprograming7999@gmail.com'
+EMAIL_PORT = 587

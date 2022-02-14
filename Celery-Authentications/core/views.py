@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .tasks import test_celery
+from .tasks import my_first_task,check_for_orders
 from rest_framework.views import APIView
 from .serializer import RegisterSerializer,SchoolSerializer,CollegeSerializer
 from rest_framework import status
@@ -13,9 +13,9 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 
 
-
 def user_home(request):
-    test_celery.delay()
+    check_for_orders.delay()
+    print("Test Data")
     return HttpResponse("Done")
 
 

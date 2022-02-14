@@ -7,8 +7,13 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_celery_project.settings'
 app = Celery('django_celery_project')
 
 app.config_from_object(settings,namespace ='CELERY')
-app.autodiscover_tasks()
+# app.autodiscover_tasks()
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @app.task(bind=True)
 def debug_task(self):
+    print("Working it")
     print('Request: {0!r}'.format(self.request))
+    
+
+    

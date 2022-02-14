@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
-
+from django.utils import timezone
 class SchoolManagement(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     school_name  = models.CharField(max_length =100,blank =True)
@@ -38,4 +37,10 @@ class College(models.Model):
     def __str__(self):
         return self.name
     
-               
+class Order(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    date_created = models.DateTimeField('date_created', default=timezone.now(), blank=False)
+    manu_date = models.DateField('Manufacturing', null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='updated_by_user', on_delete=models.CASCADE)
+    date_updated = models.DateField(max_length=100, null=True)               
